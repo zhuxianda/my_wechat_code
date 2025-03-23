@@ -1,0 +1,16 @@
+{
+    "___说明___": "这是一个配置文件示例，请复制为config.json并填入真实的API密钥",
+    "api_key": "sk-or-v1-your-openrouter-api-key",
+    "base_url": "https://openrouter.ai/api/v1",
+    "model1": "anthropic/claude-3.7-sonnet",
+    "model2": "Pro/deepseek-ai/DeepSeek-V3",
+    "model3": "deepseek-r1-250120",
+    "model4": "deepseek-v3-241226",
+    "AtMe": "@用户 ",
+    "bot_name": "AI助手",
+    "group": "wxid_of_your_group",
+    "group_switch": "False",
+    "wcf_api_key": "your-wcf-api-key-here",
+    "prompt": "你是一个智能AI助手，请用简短清晰的语言回答问题。",
+    "test_mode": false
+} 

@@ -1,0 +1,11 @@
+{
+    "api_key": "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",
+    "base_url": "https://openrouter.ai/api/v1",
+    "model1": "anthropic/claude-3.7-sonnet",
+    "AtMe": "",
+    "bot_name": "测试机器人",
+    "group": "test_group",
+    "wcf_api_key": "test-api-key",
+    "prompt": "你是一个智能AI助手，请用简短清晰的语言回答问题。",
+    "test_mode": false
+} 
