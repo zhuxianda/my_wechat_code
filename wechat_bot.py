@@ -120,6 +120,36 @@ def process_sse_events(response, config, messages):
                             data = json.loads(data_str)
                             #print(f"收到SSE事件: {json.dumps(data, ensure_ascii=False)[:200]}...")
                             
+                            # 添加更美观的数据输出
+                            # print("\n" + "="*50)
+                            # print(f"收到新消息 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                            # print("-"*50)
+                            
+                            # 提取关键信息并格式化输出
+                            # if "type" in data:
+                            #     msg_type = data.get("type")
+                            #     type_text = "文本消息" if msg_type == 1 else f"其他类型消息({msg_type})"
+                            #     print(f"消息类型: {type_text}")
+                            
+                            # if "sender" in data:
+                            #     print(f"发送者ID: {data.get('sender')}")
+                                
+                            # if "sender_name" in data:
+                            #     print(f"发送者昵称: {data.get('sender_name')}")
+                            
+                            # if "roomid" in data:
+                            #     print(f"群组ID: {data.get('roomid')}")
+                                
+                            # if "content" in data:
+                            #     content = data.get("content", "")
+                            #     print(f"消息内容: {content}")
+                            
+                            # # 打印完整JSON（美化格式）
+                            # print("-"*50)
+                            # print("完整数据:")
+                            # print(json.dumps(data, ensure_ascii=False, indent=2))
+                            # print("="*50)
+                            
                             # 处理消息数据
                             if "id" in data and "type" in data and "sender" in data and "content" in data:
                                 msg = data
@@ -212,7 +242,7 @@ def get_self_wxid(api_key):
         print(f"获取微信ID失败: {e}")
         return None
 
-def is_target_message(msg, group_id, prefix="#真实"):
+def is_target_message(msg, group_id, prefixes=["#真实", "#毒舌"]):
     """判断是否是目标消息"""
     # 检查消息类型是否为文本消息
     if msg.get("type") != 1:  # 文本消息类型通常为1
@@ -223,12 +253,13 @@ def is_target_message(msg, group_id, prefix="#真实"):
     if not room_id or (isinstance(group_id, list) and room_id not in group_id) or (not isinstance(group_id, list) and room_id != group_id):
         return False
     
-    # 检查消息内容是否以指定前缀开头
+    # 检查消息内容是否以任一指定前缀开头
     content = msg.get("content", "")
-    if not content.startswith(prefix):
-        return False
+    for prefix in prefixes:
+        if content.startswith(prefix):
+            return prefix  # 返回匹配到的前缀
     
-    return True
+    return False
 
 def process_message(msg, config):
     """处理接收到的消息"""
@@ -239,8 +270,9 @@ def process_message(msg, config):
     bot_name = config.get("bot_name", "")
     at_me_prefix = config.get("AtMe", "@")
     
-    # 如果不是目标消息，直接返回
-    if not is_target_message(msg, target_group, "#真实"):
+    # 检查是否是目标消息，并获取匹配的前缀
+    matched_prefix = is_target_message(msg, target_group, ["#真实", "#毒舌"])
+    if not matched_prefix:
         return
     
     print(f"有进来 数据 处理消息: {msg}")
@@ -251,15 +283,23 @@ def process_message(msg, config):
     
     # 获取消息内容并去除前缀
     content = msg.get("content", "")
-    content = content.replace("#真实", "", 1).strip()
+    content = content.replace(matched_prefix, "", 1).strip()
+    
+    # 设置prompt_type
+    prompt_type = "normal"
+    if matched_prefix == "#毒舌":
+        prompt_type = "ds"
+    elif matched_prefix == "#真实":
+        prompt_type = "zs"
     
     # 调用AI获取回复
-    print(f"处理消息: {content}")
+    print(f"处理消息: {content} (类型: {prompt_type})")
     # 发送正在思考的消息
     notify_msg = f"{at_me_prefix}{sender_wxid} 正在思考中..."
     send_text_message(wcf_api_key, notify_msg, room_id, sender_wxid)
     
-    ai_responses = chat.send_message(content)
+    # 使用不同的prompt_type调用AI
+    ai_responses = chat.send_message(content, prompt_type=prompt_type)
     if not ai_responses or len(ai_responses) == 0:
         # 发送错误消息
         error_msg = f"{at_me_prefix}{sender_wxid} 抱歉，AI服务暂时不可用，请稍后再试。"
@@ -437,31 +477,31 @@ def main():
         if test_mode:
             # 测试模式下模拟接收消息
             print("模拟等待新消息中...")
-            time.sleep(10)
-            print("收到模拟测试消息!")
+            # time.sleep(10)
+            # print("收到模拟测试消息!")
             
-            # 创建一个模拟消息
-            test_msg = {
-                "id": 12345,
-                "type": 1,  # 文本消息
-                "sender": "wxid_test_sender",
-                "content": "#真实 你好，这是一条测试消息",
-                "roomid": target_group[0] if isinstance(target_group, list) else target_group or "test_group_id",
-                "timestamp": int(time.time()),
-                "datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
+            # # 创建一个模拟消息
+            # test_msg = {
+            #     "id": 12345,
+            #     "type": 1,  # 文本消息
+            #     "sender": "wxid_test_sender",
+            #     "content": "#真实 你好，这是一条测试消息",
+            #     "roomid": target_group[0] if isinstance(target_group, list) else target_group or "test_group_id",
+            #     "timestamp": int(time.time()),
+            #     "datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            # }
             
-            # 保存消息
-            messages.append(test_msg)
-            save_messages(messages)
+            # # 保存消息
+            # messages.append(test_msg)
+            # save_messages(messages)
             
-            # 处理模拟消息
-            print("处理模拟消息...")
-            process_message(test_msg, config)
+            # # 处理模拟消息
+            # print("处理消息...")
+            # process_message(test_msg, config)
             
-            print("\n测试模式: 消息处理完成。在实际模式下，程序会继续监听新消息。")
-            print("按下Ctrl+C退出程序")
-            time.sleep(60)  # 等待用户手动退出
+            # print("\n测试模式: 消息处理完成。在实际模式下，程序会继续监听新消息。")
+            # print("按下Ctrl+C退出程序")
+            # time.sleep(60)  # 等待用户手动退出
         else:
             # 实际模式下使用SSE接收消息
             while True:

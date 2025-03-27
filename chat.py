@@ -53,8 +53,8 @@ def deepseek_chat(message, model=None, stream=True, prompt=None, config=None, pr
     if prompt is None:
         if prompt_type == 'ds':
             prompt = config.get('prompt_ds', "")
-        elif prompt_type == 'hh':
-            prompt = config.get('prompt_hh', "")
+        elif prompt_type == 'zs':
+            prompt = config.get('prompt_zs', "")
         else:
             prompt = config.get('prompt', "")
     
@@ -106,22 +106,11 @@ def deepseek_chat(message, model=None, stream=True, prompt=None, config=None, pr
         #print(output)  # 打印回复
         return output  # 返回回复内容
 
-def send_message(message, model=None, stream=False, prompt_type=None):
-    """
-    发送消息给AI并获取回复的简便接口
+def send_message(message, prompt_type="normal"):
     
-    参数:
-        message (str): 用户输入的消息
-        model (str): 使用的模型标识，如果为None则使用配置中的model1
-        stream (bool): 是否使用流式输出
-        prompt_type (str): 提示词类型，可选值为'default'、'ds'或'hh'，默认为'default'
-        
-    返回:
-        str: AI 返回的回复，如果回复过长会分段
-    """
     config = load_config()
     try:
-        reply = deepseek_chat(message, model, stream, config=config, prompt_type=prompt_type)
+        reply = deepseek_chat(message, config.get('model1', ""), config=config, prompt=prompt_type)
         
         # 处理长回复
         if len(reply) >= 18000:
@@ -138,7 +127,7 @@ def send_message(message, model=None, stream=False, prompt_type=None):
 if __name__ == "__main__":
     print("Chat API 测试")
 
-    response = send_message("为什么你要这样做？", model="anthropic/claude-3.7-sonnet")
+    response = send_message("为什么你要这样做？", prompt_type="truthful")
     print(response[0])
 
     # 将文本转换为SVG并保存

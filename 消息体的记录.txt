@@ -1,0 +1,98 @@
+--------------------------------------------------
+消息类型: 文本消息
+发送者ID: wxid_d439rfxsetl211
+群组ID: wxid_d439rfxsetl211
+消息内容: 大大是的撒旦撒旦撒旦撒大萨达手打
+--------------------------------------------------
+完整数据:
+{
+  "id": 3771535745444920481,
+  "ts": 1743005067,
+  "sign": "a8a5f60106d00742cd311d8a8ccaa3f4",
+  "type": 1,
+  "xml": "<msgsource>\n    <alnode>\n        <fr>1</fr>\n    </alnode>\n    <signature>N0_V1_7nw19HWx|v1_isnSgIzD</signature>\n    <tmp_node>\n        <publisher-id />\n    </tmp_node>\n    <sec_msg_node>\n        <alnode>\n            <fr>1</fr>\n        </alnode>\n    </sec_msg_node>\n</msgsource>\n",
+  "sender": "wxid_d439rfxsetl211",
+  "roomid": "wxid_d439rfxsetl211",
+  "content": "大大是的撒旦撒旦撒旦撒大萨达手打",
+  "thumb": "",
+  "extra": "",
+  "is_at": false,
+  "is_self": false,
+  "is_group": false
+}
+==================================================
+
+==================================================
+收到新消息 - 2025-03-27 00:04:42
+--------------------------------------------------
+消息类型: 其他类型消息(49)
+发送者ID: wxid_d439rfxsetl211
+群组ID: wxid_d439rfxsetl211
+消息内容: <?xml version="1.0"?>
+<msg>
+        <appmsg appid="" sdkver="0">
+                <title>1111</title>
+                <des />
+                <action />
+                <type>57</type>
+                <showtype>0</showtype>
+                <soundtype>0</soundtype>
+                <mediatagname />
+                <messageext />
+                <messageaction />
+                <content />
+                <contentattr>0</contentattr>
+                <url />
+                <lowurl />
+                <dataurl />
+                <lowdataurl />
+                <appattach>
+                        <totallen>0</totallen>
+                        <attachid />
+                        <emoticonmd5 />
+                        <fileext />
+                        <aeskey />
+                </appattach>
+                <extinfo />
+                <sourceusername />
+                <sourcedisplayname />
+                <thumburl />
+                <md5 />
+                <statextstr />
+                <refermsg>
+                        <type>1</type>
+                        <svrid>3771535745444920481</svrid>
+                        <fromusr>wxid_d439rfxsetl211</fromusr>
+                        <chatusr>wxid_d439rfxsetl211</chatusr>
+                        <displayname>达达</displayname>
+                        <content>大大是的撒旦撒旦撒旦撒大萨达手打</content>
+                        <msgsource>&lt;msgsource&gt;&lt;alnode&gt;&lt;fr&gt;1&lt;/fr&gt;&lt;/alnode&gt;&lt;/msgsource&gt;</msgsource>
+                </refermsg>
+        </appmsg>
+        <fromusername>wxid_d439rfxsetl211</fromusername>
+        <scene>0</scene>
+        <appinfo>
+                <version>1</version>
+                <appname></appname>
+        </appinfo>
+        <commenturl></commenturl>
+</msg>
+
+--------------------------------------------------
+完整数据:
+{
+  "id": 6925078242397369802,
+  "ts": 1743005081,
+  "sign": "051ff1396d9ed66e9557fe07da2fd2ee",
+  "type": 49,
+  "xml": "<msgsource>\n    <sec_msg_node>\n        <uuid>3263853690b82055347124902829efe8_</uuid>\n        <risk-file-flag />\n        <risk-file-md5-list />\n        <alnode>\n            <fr>1</fr>\n        </alnode>\n    </sec_msg_node>\n    <signature>N0_V1_wvzLEDX7|v1_mchFVlJt</signature>\n    <tmp_node>\n        <publisher-id />\n    </tmp_node>\n</msgsource>\n",
+  "sender": "wxid_d439rfxsetl211",
+  "roomid": "wxid_d439rfxsetl211",
+  "content": "<?xml version=\"1.0\"?>\n<msg>\n\t<appmsg appid=\"\" sdkver=\"0\">\n\t\t<title>1111</title>\n\t\t<des />\n\t\t<action />\n\t\t<type>57</type>\n\t\t<showtype>0</showtype>\n\t\t<soundtype>0</soundtype>\n\t\t<mediatagname />\n\t\t<messageext />\n\t\t<messageaction />\n\t\t<content />\n\t\t<contentattr>0</contentattr>\n\t\t<url />\n\t\t<lowurl />\n\t\t<dataurl />\n\t\t<lowdataurl />\n\t\t<appattach>\n\t\t\t<totallen>0</totallen>\n\t\t\t<attachid />\n\t\t\t<emoticonmd5 />\n\t\t\t<fileext />\n\t\t\t<aeskey />\n\t\t</appattach>\n\t\t<extinfo />\n\t\t<sourceusername />\n\t\t<sourcedisplayname />\n\t\t<thumburl />\n\t\t<md5 />\n\t\t<statextstr />\n\t\t<refermsg>\n\t\t\t<type>1</type>\n\t\t\t<svrid>3771535745444920481</svrid>\n\t\t\t<fromusr>wxid_d439rfxsetl211</fromusr>\n\t\t\t<chatusr>wxid_d439rfxsetl211</chatusr>\n\t\t\t<displayname>达达</displayname>\n\t\t\t<content>大大是的撒旦撒旦撒旦撒大萨达手打</content>\n\t\t\t<msgsource>&lt;msgsource&gt;&lt;alnode&gt;&lt;fr&gt;1&lt;/fr&gt;&lt;/alnode&gt;&lt;/msgsource&gt;</msgsource>\n\t\t</refermsg>\n\t</appmsg>\n\t<fromusername>wxid_d439rfxsetl211</fromusername>\n\t<scene>0</scene>\n\t<appinfo>\n\t\t<version>1</version>\n\t\t<appname></appname>\n\t</appinfo>\n\t<commenturl></commenturl>\n</msg>\n",
+  "thumb": "",
+  "extra": "C:/Users/Administrator/Documents/WeChat Files/wxid_558unbfvyeat22/FileStorage/Cache/2025-03/1d6f5d69343eb21b0ba3d5ded61687d6",
+  "is_at": false,
+  "is_self": false,
+  "is_group": false
+}
+==================================================
