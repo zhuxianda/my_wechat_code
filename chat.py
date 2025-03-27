@@ -69,6 +69,8 @@ def deepseek_chat(message, model=None, stream=True, prompt=None, config=None, pr
         base_url=config.get('base_url', "")
     )
     
+    print("输出下 prompt : " +  prompt)
+    
     try:
         response = client.chat.completions.create(
             model=model,
@@ -111,7 +113,7 @@ def send_message(message, prompt_type="normal"):
     
     config = load_config()
     try:
-        reply = deepseek_chat(message, config.get('model1', ""), config=config, prompt=prompt_type)
+        reply = deepseek_chat(message, config.get('model1', ""), config=config, prompt_type=prompt_type)
         
         # 处理长回复
         if len(reply) >= 18000:

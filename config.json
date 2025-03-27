@@ -1,5 +1,5 @@
 {
-    "api_key": "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",
+    "api_key": "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",
     "base_url": "https://openrouter.ai/api/v1",
     "model1": "anthropic/claude-3.7-sonnet",
     "AtMe": "@",
