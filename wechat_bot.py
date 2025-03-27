@@ -160,10 +160,11 @@ def process_sse_events(response, config, messages):
                                 if "datetime" not in msg:
                                     msg["datetime"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                 messages.append(msg)
+                                
                                 save_messages(messages)
                                 
                                 # 处理消息
-                                process_message(msg, config)
+                                process_message(msg, config, messages)
                             else:
                                 # 可能是心跳或其他类型的事件
                                 print(f"收到非标准消息格式或事件: {data}")
@@ -261,7 +262,7 @@ def is_target_message(msg, group_id, prefixes=["#真实", "#毒舌"]):
     
     return False
 
-def process_message(msg, config):
+def process_message(msg, config, messages=None):
     """处理接收到的消息"""
     # 获取配置信息
     api_key = config.get("api_key", "")  # OpenRouter API密钥
@@ -298,8 +299,14 @@ def process_message(msg, config):
     notify_msg = f"{at_me_prefix}{sender_wxid} 正在思考中..."
     send_text_message(wcf_api_key, notify_msg, room_id, sender_wxid)
     
-    # 使用不同的prompt_type调用AI
-    ai_responses = chat.send_message(content, prompt_type=prompt_type)
+    # 获取最近5分钟的聊天历史
+    chat_history = []
+    if messages is not None:
+        chat_history = get_recent_chat_history(messages, room_id, minutes=5)
+        print(f"找到{len(chat_history)}条最近的聊天记录作为上下文")
+    
+    # 使用不同的prompt_type调用AI，并传递聊天历史
+    ai_responses = chat.send_message(content, prompt_type=prompt_type, history_messages=chat_history)
     if not ai_responses or len(ai_responses) == 0:
         # 发送错误消息
         error_msg = f"{at_me_prefix}{sender_wxid} 抱歉，AI服务暂时不可用，请稍后再试。"
@@ -412,6 +419,64 @@ def send_file(api_key, file_data, filename, receiver):
         print(f"发送文件失败: {e}")
         return None
 
+def get_recent_chat_history(messages, room_id, minutes=2):
+    """
+    获取最近几分钟内的聊天历史
+    
+    参数:
+        messages (list): 消息列表
+        room_id (str): 群组ID
+        minutes (int): 获取几分钟之内的消息，默认为5分钟
+    
+    返回:
+        list: 格式化后的最近聊天记录，用于AI模型的历史消息
+    """
+    if not messages:
+        return []
+    
+    # 获取当前时间的时间戳
+    current_time = int(time.time())
+    # 计算几分钟前的时间戳
+    time_threshold = current_time - (minutes * 60)
+    
+    # 筛选出最近几分钟内指定群组的消息
+    recent_messages = []
+    for msg in reversed(messages):  # 从最新的消息开始遍历
+        # 跳过非目标群组的消息
+        if msg.get("roomid") != room_id:
+            continue
+            
+        # 检查消息时间是否在指定范围内
+        msg_timestamp = msg.get("timestamp", 0)
+        if msg_timestamp < time_threshold:
+            break  # 如果消息时间早于阈值，停止遍历
+            
+        # 仅添加文本消息
+        if msg.get("type") == 1:  # 文本消息类型
+            recent_messages.append(msg)
+    
+    # 因为是从新到旧遍历的，所以需要反转列表
+    recent_messages.reverse()
+    
+    # 格式化消息，转换为AI模型需要的格式
+    formatted_history = []
+    for msg in recent_messages:
+        sender_name = msg.get("sender", "用户")
+        content = msg.get("content", "")
+        
+        # 检查并去除消息前缀（如#真实、#毒舌等）
+        for prefix in ["#真实", "#毒舌"]:
+            if content.startswith(prefix):
+                content = content.replace(prefix, "", 1).strip()
+                break
+                
+        formatted_history.append({
+            "role": "user",
+            "content": f"{sender_name}: {content}"
+        })
+    
+    return formatted_history
+
 def main():
     """主函数"""
     print("微信机器人启动中...")
@@ -499,9 +564,9 @@ def main():
             # print("处理消息...")
             # process_message(test_msg, config)
             
-            # print("\n测试模式: 消息处理完成。在实际模式下，程序会继续监听新消息。")
-            # print("按下Ctrl+C退出程序")
-            # time.sleep(60)  # 等待用户手动退出
+            # # 处理模拟消息
+            # print("处理消息...")
+            # process_message(test_msg, config, messages)
         else:
             # 实际模式下使用SSE接收消息
             while True:
